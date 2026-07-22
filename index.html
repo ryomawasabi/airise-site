@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Airise合同会社 | AI・テクノロジーでビジネスを次の高みへ</title>
+<meta name="description" content="Airise合同会社は、AIとソフトウェア開発を軸に、企業のDXと成長を支援するテクノロジーカンパニーです。">
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#4f6bff;
+    --violet:#8a5cff;
+    --cyan:#22d3ee;
+    --grad:linear-gradient(120deg,#4f6bff 0%,#8a5cff 55%,#22d3ee 130%);
+    --bg:#ffffff;
+    --bg-2:#f3f6fd;
+    --bg-3:#e9edf9;
+    --ink:#0b1020;
+    --ink-2:#525a76;
+    --ink-3:#767e99;
+    --line:rgba(12,18,45,.10);
+    --line-2:rgba(79,107,255,.30);
+    --glow:0 22px 55px -26px rgba(79,107,255,.45);
+    --shadow-sm:0 12px 30px -18px rgba(24,34,90,.28);
+    --shadow:0 30px 70px -34px rgba(30,42,100,.32);
+    --maxw:1200px;
+    --font-hud:"Chakra Petch","Noto Sans JP",sans-serif;
+    --font-mono:"JetBrains Mono",ui-monospace,monospace;
+    --font-jp:"Noto Sans JP","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font-jp);color:var(--ink);background:var(--bg);
+    line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative;
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:rgba(79,107,255,.18);color:var(--ink)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;position:relative}
+  .mono{font-family:var(--font-mono);letter-spacing:.02em}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* ---------- global fx ---------- */
+  .fx{position:fixed;inset:0;pointer-events:none}
+  .fx-grid{background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:66px 66px;opacity:.6;mask-image:radial-gradient(ellipse at 50% 22%,#000 26%,transparent 72%);z-index:0}
+  #cursor{position:fixed;top:0;left:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;
+    background:radial-gradient(circle,rgba(79,107,255,.10),rgba(138,92,255,.05) 42%,transparent 66%);
+    pointer-events:none;z-index:1;transition:opacity .4s;will-change:transform}
+  .corner{position:fixed;width:26px;height:26px;border:1.5px solid rgba(79,107,255,.42);z-index:40;pointer-events:none}
+  .corner.tl{top:16px;left:16px;border-right:0;border-bottom:0}
+  .corner.tr{top:16px;right:16px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:16px;left:16px;border-right:0;border-top:0}
+  .corner.br{bottom:16px;right:16px;border-left:0;border-top:0}
+  #progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:60;background:var(--grad);box-shadow:0 0 10px rgba(79,107,255,.6);transition:width .1s linear}
+
+  /* ---------- boot loader ---------- */
+  #boot{display:none}
+  html.js #boot{display:flex;position:fixed;inset:0;z-index:100;background:var(--bg);
+    flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .6s ease,visibility .6s}
+  #boot.done{opacity:0;visibility:hidden}
+  #boot .bmark{width:60px;height:60px;border-radius:14px;background:var(--grad);display:grid;place-items:center;box-shadow:var(--glow);animation:pulse 1.2s ease-in-out infinite}
+  #boot .bmark svg{width:34px;height:34px}
+  @keyframes pulse{50%{transform:scale(.9);opacity:.7}}
+  #boot .blog{font-family:var(--font-mono);font-size:12px;color:var(--ink-3);text-align:center;min-height:18px;letter-spacing:.05em}
+  #boot .bbar{width:min(300px,60vw);height:3px;background:var(--bg-3);border-radius:3px;overflow:hidden}
+  #boot .bbar i{display:block;height:100%;width:0;background:var(--grad)}
+  #boot .bpct{font-family:var(--font-mono);font-size:13px;color:var(--ink-2);letter-spacing:.1em}
+
+  /* ---------- HUD strip ---------- */
+  .hud{border-bottom:1px solid var(--line);background:rgba(255,255,255,.7);backdrop-filter:blur(8px)}
+  .hud .wrap{display:flex;align-items:center;justify-content:space-between;height:30px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
+  .hud .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px rgba(79,107,255,.8);display:inline-block;margin-right:7px;animation:blink 1.6s steps(1) infinite}
+  @keyframes blink{50%{opacity:.25}}
+  .hud .hr{display:flex;gap:20px;align-items:center}
+
+  /* ---------- header ---------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:.3s}
+  header.scrolled{border-bottom-color:var(--line);box-shadow:0 8px 30px -24px rgba(20,30,80,.5)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo{display:flex;align-items:center;gap:11px;font-family:var(--font-hud);font-weight:700;font-size:20px;letter-spacing:.02em}
+  .logo .mark{width:32px;height:32px;border-radius:9px;background:var(--grad);display:grid;place-items:center;box-shadow:var(--glow);position:relative}
+  .logo .mark svg{width:18px;height:18px}
+  .nav-links{display:flex;align-items:center;gap:32px}
+  .nav-links a{font-family:var(--font-hud);font-size:14px;font-weight:500;color:var(--ink-2);transition:.2s;position:relative;display:flex;align-items:center;gap:7px}
+  .nav-links a i{font-family:var(--font-mono);font-size:10px;color:var(--blue);font-style:normal;padding:1px 4px;border-radius:3px;transition:.25s}
+  .nav-links a.active{color:var(--ink)}
+  .nav-links a.active i{color:#fff;background:var(--grad)}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-right{display:flex;align-items:center;gap:14px}
+  .lang-toggle{display:inline-flex;border:1px solid var(--line);border-radius:2px;overflow:hidden;font-family:var(--font-mono)}
+  .lang-toggle button{border:0;background:transparent;padding:7px 11px;font-size:11px;font-weight:600;color:var(--ink-3);cursor:pointer;transition:.2s;letter-spacing:.05em}
+  .lang-toggle button.active{background:var(--blue);color:#fff}
+  .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:8px}
+  .hamburger span{width:24px;height:2px;background:var(--ink);border-radius:2px;transition:.3s}
+
+  /* ---------- buttons ---------- */
+  .btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-hud);font-weight:600;font-size:14.5px;
+    padding:14px 26px;cursor:pointer;border:1px solid transparent;transition:.25s;white-space:nowrap;position:relative;letter-spacing:.02em;
+    clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+  .btn-primary{background:var(--grad);color:#fff;box-shadow:0 14px 30px -14px rgba(79,107,255,.75)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px -14px rgba(79,107,255,.85)}
+  .btn-ghost{background:#fff;color:var(--ink);border-color:var(--line-2)}
+  .btn-ghost:hover{background:rgba(79,107,255,.07);border-color:var(--blue)}
+  .arrow{transition:transform .25s}
+  .btn:hover .arrow{transform:translateX(4px)}
+
+  /* ---------- section scaffolding ---------- */
+  section{padding:110px 0;position:relative}
+  .tag{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.2em;color:var(--blue);text-transform:uppercase;margin-bottom:20px}
+  .tag::before{content:"";width:26px;height:1px;background:var(--blue)}
+  .tag .idx{color:var(--ink-3)}
+  .sec-head{max-width:680px;margin:0 auto 66px;text-align:center}
+  .sec-head .tag{justify-content:center}
+  .sec-head h2{font-family:var(--font-hud);font-size:clamp(28px,4vw,44px);font-weight:700;margin:6px 0 16px;letter-spacing:-.01em;line-height:1.18;color:var(--ink)}
+  .sec-head p{color:var(--ink-2);font-size:16px}
+
+  /* ---------- hero ---------- */
+  .hero{padding:120px 0 96px;overflow:hidden;border-bottom:1px solid var(--line);position:relative;
+    background:
+      radial-gradient(58% 48% at 18% 8%,rgba(79,107,255,.13),transparent 62%),
+      radial-gradient(52% 50% at 86% 12%,rgba(138,92,255,.12),transparent 62%),
+      radial-gradient(56% 55% at 72% 96%,rgba(34,211,238,.12),transparent 62%),
+      #ffffff;}
+  #net{position:absolute;inset:0;z-index:0;pointer-events:none;
+    -webkit-mask-image:radial-gradient(122% 98% at 50% 42%,rgba(0,0,0,.45) 10%,#000 50%);
+    mask-image:radial-gradient(122% 98% at 50% 42%,rgba(0,0,0,.45) 10%,#000 50%);}
+  .hero::before,.hero::after{content:"";position:absolute;border-radius:50%;filter:blur(100px);z-index:0;opacity:.7}
+  .hero::before{width:520px;height:520px;background:radial-gradient(circle,rgba(79,107,255,.28),transparent 65%);top:-180px;right:-80px}
+  .hero::after{width:480px;height:480px;background:radial-gradient(circle,rgba(138,92,255,.22),transparent 65%);bottom:-220px;left:-120px}
+  .hero .wrap{max-width:960px;text-align:center;z-index:2}
+  .hero-kicker{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.32em;color:var(--blue);text-transform:uppercase;display:inline-block;padding:8px 18px;border:1px solid var(--line-2);border-radius:2px;background:rgba(79,107,255,.06);margin-bottom:30px}
+  .hero h1{font-family:var(--font-hud),var(--font-jp);font-weight:700;font-size:clamp(34px,6.4vw,70px);letter-spacing:-.02em;line-height:1.14;margin-bottom:26px;color:var(--ink);
+    animation:glitch 7s infinite}
+  html[lang="ja"] .hero h1{font-weight:800}
+  @keyframes glitch{
+    0%,93%,100%{text-shadow:none}
+    94%{text-shadow:-1.5px 0 rgba(34,211,238,.7),1.5px 0 rgba(138,92,255,.7)}
+    95%{text-shadow:1.5px 0 rgba(34,211,238,.7),-1.5px 0 rgba(79,107,255,.7)}
+    96%{text-shadow:none}
+  }
+  .hero p.lead{font-size:clamp(15px,2vw,18.5px);color:var(--ink-2);max-width:620px;margin:0 auto 40px}
+  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .scroll-cue{margin-top:70px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.3em;color:var(--ink-3);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .scroll-cue .bar{width:1px;height:40px;background:linear-gradient(var(--blue),transparent);animation:drop 1.8s ease-in-out infinite}
+  @keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+  /* ---------- ticker ---------- */
+  .ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff;overflow:hidden;padding:16px 0}
+  .ticker-track{display:flex;white-space:nowrap;width:max-content;animation:marq 30s linear infinite}
+  .ticker-track span{font-family:var(--font-hud);font-weight:600;font-size:19px;color:var(--ink);display:flex;align-items:center;letter-spacing:.02em}
+  .ticker-track span::after{content:"◆";color:var(--blue);margin:0 26px;font-size:11px}
+  @keyframes marq{to{transform:translateX(-50%)}}
+  .ticker:hover .ticker-track{animation-play-state:paused}
+
+  /* ---------- strengths ---------- */
+  #strengths{background:var(--bg-2)}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .card{background:#fff;padding:38px 34px;position:relative;transition:.3s;overflow:hidden}
+  .card::after{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(79,107,255,.08),transparent 70%);opacity:0;transition:.4s;pointer-events:none}
+  .card:hover{background:#fff;box-shadow:var(--shadow);z-index:2}
+  .card:hover::after{opacity:1}
+  .card .cidx{font-family:var(--font-mono);font-size:12px;color:var(--blue);letter-spacing:.1em;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+  .card .cidx .st{color:var(--ink-3);font-size:10px}
+  .card .ico{width:48px;height:48px;border:1px solid var(--line-2);display:grid;place-items:center;margin-bottom:22px;background:rgba(79,107,255,.05)}
+  .card .ico svg{width:24px;height:24px;stroke:var(--blue)}
+  .card h3{font-family:var(--font-hud);font-size:19.5px;font-weight:600;margin-bottom:11px;letter-spacing:.01em;color:var(--ink)}
+  .card p{color:var(--ink-2);font-size:14.5px}
+  .card .corner-b{position:absolute;width:14px;height:14px;border:1.5px solid var(--blue);opacity:0;transition:.3s}
+  .card .corner-b.a{top:12px;left:12px;border-right:0;border-bottom:0}
+  .card .corner-b.b{bottom:12px;right:12px;border-left:0;border-top:0}
+  .card:hover .corner-b{opacity:.9}
+
+  /* ---------- meters ---------- */
+  .meters{margin-top:64px;display:grid;grid-template-columns:1fr 1fr;gap:20px 56px}
+  .meter .mtop{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+  .meter .mname{font-family:var(--font-hud);font-weight:600;font-size:15px;color:var(--ink)}
+  .meter .mval{font-family:var(--font-mono);font-size:13px;color:var(--blue)}
+  .meter .mtrack{height:5px;background:var(--bg-3);position:relative;overflow:hidden;border-radius:3px}
+  .meter .mfill{position:absolute;inset:0 100% 0 0;background:var(--grad);transition:right 1.4s cubic-bezier(.2,.7,.2,1)}
+  .meter.in .mfill{right:calc(100% - var(--w))}
+
+  /* ---------- about ---------- */
+  .about-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:60px;align-items:center}
+  .about-copy h2{font-family:var(--font-hud);font-size:clamp(26px,3.4vw,40px);font-weight:700;margin-bottom:22px;line-height:1.22;color:var(--ink)}
+  .about-copy p{color:var(--ink-2);font-size:15.5px;margin-bottom:20px}
+  .about-copy .mission{font-family:var(--font-mono);font-size:14px;color:var(--ink);padding:18px 22px;border:1px solid var(--line-2);background:rgba(79,107,255,.05);position:relative}
+  .about-copy .mission::before{content:"//";color:var(--blue);margin-right:8px}
+  .panel{border:1px solid var(--line);background:#fff;position:relative;box-shadow:var(--shadow)}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-bottom:1px solid var(--line);font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--ink-2);text-transform:uppercase;background:var(--bg-2)}
+  .panel-head .l{display:flex;align-items:center;gap:9px}
+  .panel-head .dot{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px rgba(79,107,255,.7)}
+  .panel-head .dots{display:flex;gap:6px}
+  .panel-head .dots i{width:7px;height:7px;border:1px solid var(--ink-3);border-radius:50%}
+  .info-row{display:grid;grid-template-columns:132px 1fr;gap:14px;padding:15px 22px;border-top:1px solid var(--line);font-size:14.5px}
+  .info-row:first-child{border-top:0}
+  .info-row dt{font-family:var(--font-mono);color:var(--ink-3);font-size:12px;letter-spacing:.06em;padding-top:2px}
+  .info-row dd{color:var(--ink);font-weight:500}
+  .info-row dd a,.contact-line .val a{color:var(--blue);transition:.2s}
+  .info-row dd a:hover,.contact-line .val a:hover{color:var(--violet);text-decoration:underline}
+  .ph{color:var(--ink-3);font-family:var(--font-mono);font-size:12.5px;border:1px dashed var(--line-2);padding:2px 9px;letter-spacing:.03em;background:rgba(79,107,255,.04)}
+
+  /* ---------- contact ---------- */
+  #contact{background:var(--bg-2);border-top:1px solid var(--line)}
+  .contact-grid{display:grid;grid-template-columns:1fr 1.12fr;gap:60px;align-items:start}
+  .contact-copy h2{font-family:var(--font-hud);font-size:clamp(26px,3.4vw,40px);font-weight:700;margin:6px 0 18px;color:var(--ink)}
+  .contact-copy p{color:var(--ink-2);font-size:15.5px;margin-bottom:30px}
+  .contact-line{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+  .contact-line .ic{width:44px;height:44px;border:1px solid var(--line-2);display:grid;place-items:center;flex:none;background:#fff}
+  .contact-line .ic svg{width:19px;height:19px;stroke:var(--blue)}
+  .contact-line .lbl{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase}
+  .contact-line .val{color:var(--ink);font-size:14.5px}
+  form{border:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+  form .form-in{padding:32px}
+  .field{margin-bottom:18px}
+  .field label{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--ink-2);margin-bottom:8px;text-transform:uppercase}
+  .field label::before{content:"> ";color:var(--blue)}
+  .field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:0;padding:13px 15px;font-size:15px;font-family:var(--font-jp);color:var(--ink);background:#fbfcff;transition:.2s;resize:vertical}
+  .field input::placeholder,.field textarea::placeholder{color:var(--ink-3)}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(79,107,255,.14)}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  form button{width:100%;justify-content:center;margin-top:4px}
+  .form-note{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-3);text-align:center;margin-top:14px;letter-spacing:.03em}
+  .form-success{display:none;border:1px solid var(--blue);background:rgba(79,107,255,.06);padding:18px;text-align:center;color:var(--ink);font-family:var(--font-mono);font-size:13px;margin-top:10px;letter-spacing:.05em}
+  .form-success.show{display:block}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--bg-2);padding:70px 0 30px;border-top:1px solid var(--line);position:relative}
+  .foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;padding-bottom:40px;border-bottom:1px solid var(--line)}
+  .foot-brand{max-width:340px}
+  .foot-brand .logo{margin-bottom:16px}
+  .foot-brand p{color:var(--ink-2);font-size:14px}
+  .foot-nav{display:flex;gap:54px;flex-wrap:wrap}
+  .foot-nav .col h4{font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3);margin-bottom:16px}
+  .foot-nav .col a{display:block;color:var(--ink-2);font-size:14px;margin-bottom:11px;transition:.2s}
+  .foot-nav .col a:hover{color:var(--blue)}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:24px;font-family:var(--font-mono);font-size:11px;color:var(--ink-3);letter-spacing:.05em}
+
+  /* ---------- reveal ---------- */
+  .reveal{transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+  html.js .reveal:not(.in){opacity:0;transform:translateY(28px)}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:920px){
+    .nav-links{display:none}
+    .hamburger{display:flex}
+    .nav-links.open{display:flex;position:absolute;top:66px;left:0;right:0;flex-direction:column;gap:0;background:#fff;border-bottom:1px solid var(--line);padding:8px 26px 20px;box-shadow:var(--shadow)}
+    .nav-links.open a{padding:15px 0;border-bottom:1px solid var(--line);width:100%}
+    .about-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+    .cards{grid-template-columns:1fr}
+    .meters{grid-template-columns:1fr;gap:22px}
+    section{padding:78px 0}
+    .hud .hr .hide-sm{display:none}
+  }
+  @media(max-width:520px){
+    .field-row{grid-template-columns:1fr}
+    .nav-right .btn{display:none}
+    .form-in{padding:24px}
+    .hud .wrap{font-size:9.5px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms!important;animation-iteration-count:1!important}
+    .ticker-track{animation:none}
+    #cursor{display:none}
+    .hero h1{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== FX layers ===== -->
+<div class="fx fx-grid"></div>
+<div id="cursor"></div>
+<div id="progress"></div>
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+
+<!-- ===== Boot loader ===== -->
+<div id="boot">
+  <div class="bmark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3L4 20h4l4-9 4 9h4L12 3z" fill="#fff"/></svg></div>
+  <div class="blog mono" id="bootLog">INITIALIZING AIRISE_OS...</div>
+  <div class="bbar"><i id="bootBar"></i></div>
+  <div class="bpct mono" id="bootPct">0%</div>
+</div>
+
+<!-- ===== HUD strip ===== -->
+<div class="hud">
+  <div class="wrap">
+    <span><span class="dot"></span>SYSTEM ONLINE</span>
+    <span class="hr">
+      <span class="hide-sm">AIRISE_OS // v2.0.26</span>
+      <span class="hide-sm">LAT 35.68 / LON 139.76</span>
+      <span id="clock">--:--:--</span>
+    </span>
+  </div>
+</div>
+
+<!-- ===== Header ===== -->
+<header id="top">
+  <div class="wrap nav">
+    <a href="#top" class="logo">
+      <span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3L4 20h4l4-9 4 9h4L12 3z" fill="#fff"/></svg></span>
+      Airise
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#strengths"><i>01</i><span data-ja="強み" data-en="Strengths">強み</span></a>
+      <a href="#about"><i>02</i><span data-ja="会社概要" data-en="Company">会社概要</span></a>
+      <a href="#contact"><i>03</i><span data-ja="お問い合わせ" data-en="Contact">お問い合わせ</span></a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button data-lang="ja" class="active" onclick="setLang('ja')">JA</button>
+        <button data-lang="en" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="#contact" class="btn btn-primary" data-ja="お問い合わせ" data-en="Contact">お問い合わせ</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <canvas id="net" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <span class="hero-kicker" data-decode data-text="AI × TECHNOLOGY">AI × TECHNOLOGY</span>
+    <h1 data-ja="AIとテクノロジーで、<br>ビジネスを次の高みへ。" data-en="Rise higher with AI<br>and technology.">AIとテクノロジーで、<br>ビジネスを次の高みへ。</h1>
+    <p class="lead" data-ja="Airise合同会社は、AIとソフトウェア開発を軸に、企業のDXと事業成長を支援するテクノロジーカンパニーです。" data-en="Airise LLC is a technology company that drives DX and business growth through AI and software development.">Airise合同会社は、AIとソフトウェア開発を軸に、企業のDXと事業成長を支援するテクノロジーカンパニーです。</p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary" data-ja="無料で相談する" data-en="Get in touch">無料で相談する <span class="arrow">→</span></a>
+      <a href="#strengths" class="btn btn-ghost" data-ja="強みを見る" data-en="Our strengths">強みを見る</a>
+    </div>
+    <div class="scroll-cue"><span>SCROLL</span><span class="bar"></span></div>
+  </div>
+</section>
+
+<!-- ===== Ticker ===== -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>AI DEVELOPMENT</span><span>MACHINE LEARNING</span><span>GENERATIVE AI</span><span>SYSTEM DEVELOPMENT</span><span>DX CONSULTING</span><span>AUTOMATION</span>
+    <span>AI DEVELOPMENT</span><span>MACHINE LEARNING</span><span>GENERATIVE AI</span><span>SYSTEM DEVELOPMENT</span><span>DX CONSULTING</span><span>AUTOMATION</span>
+  </div>
+</div>
+
+<!-- ===== Strengths ===== -->
+<section id="strengths">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="tag"><span class="idx">S01</span> / <span data-ja="私たちの強み" data-en="Our Strengths">私たちの強み</span></span>
+      <h2 data-ja="Airiseが選ばれる理由" data-en="Why teams choose Airise">Airiseが選ばれる理由</h2>
+      <p data-ja="技術力だけでなく、事業の成果にコミットする。それがAiriseの提供価値です。" data-en="We commit not just to technology, but to your business outcomes.">技術力だけでなく、事業の成果にコミットする。それがAiriseの提供価値です。</p>
+    </div>
+    <div class="cards reveal">
+      <div class="card">
+        <span class="corner-b a"></span><span class="corner-b b"></span>
+        <div class="cidx mono"><span>01</span><span class="st">// CORE</span></div>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0 0 8v1a4 4 0 0 0 8 0v-1a4 4 0 0 0 0-8V6a4 4 0 0 0-4-4z"/><path d="M12 8v8"/></svg></div>
+        <h3 data-ja="AI・機械学習の実装力" data-en="AI &amp; ML you can ship">AI・機械学習の実装力</h3>
+        <p data-ja="最新のAI技術を、実運用に耐える形で実装。PoCで終わらせず、成果につなげます。" data-en="We turn the latest AI into production-grade systems — beyond PoCs, into real results.">最新のAI技術を、実運用に耐える形で実装。PoCで終わらせず、成果につなげます。</p>
+      </div>
+      <div class="card">
+        <span class="corner-b a"></span><span class="corner-b b"></span>
+        <div class="cidx mono"><span>02</span><span class="st">// FLOW</span></div>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+        <h3 data-ja="企画から運用まで一気通貫" data-en="Strategy to operations">企画から運用まで一気通貫</h3>
+        <p data-ja="要件定義・設計・開発・運用までワンストップ。窓口が一つだから、スピードが違います。" data-en="From requirements to design, build, and operations — one team, faster delivery.">要件定義・設計・開発・運用までワンストップ。窓口が一つだから、スピードが違います。</p>
+      </div>
+      <div class="card">
+        <span class="corner-b a"></span><span class="corner-b b"></span>
+        <div class="cidx mono"><span>03</span><span class="st">// GROWTH</span></div>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
+        <h3 data-ja="事業視点のDX支援" data-en="Business-first DX">事業視点のDX支援</h3>
+        <p data-ja="技術を目的にしません。事業課題から逆算し、投資対効果の高い打ち手を提案します。" data-en="Technology is never the goal. We start from your business challenges and propose high-ROI moves.">技術を目的にしません。事業課題から逆算し、投資対効果の高い打ち手を提案します。</p>
+      </div>
+      <div class="card">
+        <span class="corner-b a"></span><span class="corner-b b"></span>
+        <div class="cidx mono"><span>04</span><span class="st">// SPEED</span></div>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
+        <h3 data-ja="スピードと柔軟性" data-en="Speed &amp; flexibility">スピードと柔軟性</h3>
+        <p data-ja="小回りの利く少数精鋭体制。仮説検証を素早く回し、変化に強い開発を実現します。" data-en="A lean, senior team that iterates fast and adapts to change.">小回りの利く少数精鋭体制。仮説検証を素早く回し、変化に強い開発を実現します。</p>
+      </div>
+    </div>
+
+    <div class="meters reveal" id="meters">
+      <div class="meter" style="--w:96%"><div class="mtop"><span class="mname" data-ja="AI・生成AI開発" data-en="AI &amp; Generative AI">AI・生成AI開発</span><span class="mval mono">96</span></div><div class="mtrack"><div class="mfill"></div></div></div>
+      <div class="meter" style="--w:93%"><div class="mtop"><span class="mname" data-ja="Web・業務システム開発" data-en="Web &amp; Business Systems">Web・業務システム開発</span><span class="mval mono">93</span></div><div class="mtrack"><div class="mfill"></div></div></div>
+      <div class="meter" style="--w:90%"><div class="mtop"><span class="mname" data-ja="DXコンサルティング" data-en="DX Consulting">DXコンサルティング</span><span class="mval mono">90</span></div><div class="mtrack"><div class="mfill"></div></div></div>
+      <div class="meter" style="--w:88%"><div class="mtop"><span class="mname" data-ja="業務自動化・RPA" data-en="Automation &amp; RPA">業務自動化・RPA</span><span class="mval mono">88</span></div><div class="mtrack"><div class="mfill"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== About ===== -->
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about-copy reveal">
+      <span class="tag"><span class="idx">S02</span> / <span data-ja="会社概要" data-en="About">会社概要</span></span>
+      <h2 data-ja="社名に込めた、上昇への意志。" data-en="A name that means rising higher.">社名に込めた、上昇への意志。</h2>
+      <p data-ja="「Airise（エアライズ）」は、"AI" と "Rise（上昇）" を掛け合わせた社名です。テクノロジーの力で、お客様のビジネスを一段上のステージへ引き上げる——その想いを社名に込めています。" data-en="&ldquo;Airise&rdquo; combines &ldquo;AI&rdquo; and &ldquo;Rise.&rdquo; Our name carries a single promise: to lift our clients&rsquo; businesses to the next stage through the power of technology.">「Airise（エアライズ）」は、"AI" と "Rise（上昇）" を掛け合わせた社名です。テクノロジーの力で、お客様のビジネスを一段上のステージへ引き上げる——その想いを社名に込めています。</p>
+      <div class="mission" data-ja="Mission ── テクノロジーを、すべての企業の成長エンジンに。" data-en="Mission ── Making technology a growth engine for every company.">Mission ── テクノロジーを、すべての企業の成長エンジンに。</div>
+    </div>
+    <div class="panel reveal">
+      <div class="panel-head">
+        <span class="l"><span class="dot"></span><span data-ja="会社情報" data-en="Company Profile">会社情報</span></span>
+        <span class="dots"><i></i><i></i><i></i></span>
+      </div>
+      <dl>
+        <div class="info-row"><dt>COMPANY</dt><dd data-ja="Airise合同会社" data-en="Airise LLC">Airise合同会社</dd></div>
+        <div class="info-row"><dt>CEO</dt><dd data-ja="内田 稜真" data-en="Ryoma Uchida">内田 稜真</dd></div>
+        <div class="info-row"><dt>LOCATION</dt><dd data-ja="神奈川県横浜市西区浅間町1丁目4番3号 ウィザードビル402" data-en="神奈川県横浜市西区浅間町1丁目4番3号 ウィザードビル402">神奈川県横浜市西区浅間町1丁目4番3号 ウィザードビル402</dd></div>
+        <div class="info-row"><dt>BUSINESS</dt><dd data-ja="AI・システム開発、DX支援、業務自動化" data-en="AI &amp; software development, DX, automation">AI・システム開発、DX支援、業務自動化</dd></div>
+        <div class="info-row"><dt>CONTACT</dt><dd><a href="mailto:airise.info.000@gmail.com">airise.info.000@gmail.com</a></dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Contact ===== -->
+<section id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-copy reveal">
+      <span class="tag"><span class="idx">S03</span> / <span data-ja="お問い合わせ" data-en="Contact">お問い合わせ</span></span>
+      <h2 data-ja="まずは、お気軽にご相談ください。" data-en="Let&rsquo;s start a conversation.">まずは、お気軽にご相談ください。</h2>
+      <p data-ja="AI活用・システム開発・DXのご相談から、お見積もりのご依頼まで。担当者より2営業日以内にご返信します。" data-en="From AI, software, and DX questions to quote requests — we&rsquo;ll reply within two business days.">AI活用・システム開発・DXのご相談から、お見積もりのご依頼まで。担当者より2営業日以内にご返信します。</p>
+      <div class="contact-line">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg></div>
+        <div><div class="lbl">Email</div><div class="val"><a href="mailto:airise.info.000@gmail.com">airise.info.000@gmail.com</a></div></div>
+      </div>
+      <div class="contact-line">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="lbl" data-ja="所在地" data-en="Location">所在地</div><div class="val" data-ja="神奈川県横浜市西区浅間町1丁目4番3号 ウィザードビル402" data-en="神奈川県横浜市西区浅間町1丁目4番3号 ウィザードビル402">神奈川県横浜市西区浅間町1丁目4番3号 ウィザードビル402</div></div>
+      </div>
+    </div>
+    <form id="contactForm" novalidate>
+      <div class="form-in">
+        <div class="field-row">
+          <div class="field"><label data-ja="お名前" data-en="Name">お名前</label><input type="text" required data-ja-ph="山田 太郎" data-en-ph="Your name" placeholder="山田 太郎"></div>
+          <div class="field"><label data-ja="会社名" data-en="Company">会社名</label><input type="text" data-ja-ph="株式会社〇〇" data-en-ph="Company name" placeholder="株式会社〇〇"></div>
+        </div>
+        <div class="field"><label data-ja="メールアドレス" data-en="Email">メールアドレス</label><input type="email" required data-ja-ph="you@example.com" data-en-ph="you@example.com" placeholder="you@example.com"></div>
+        <div class="field"><label data-ja="お問い合わせ内容" data-en="Message">お問い合わせ内容</label><textarea rows="4" required data-ja-ph="ご相談内容をご記入ください" data-en-ph="How can we help?" placeholder="ご相談内容をご記入ください"></textarea></div>
+        <button type="submit" class="btn btn-primary" data-ja="送信する" data-en="Send message">送信する <span class="arrow">→</span></button>
+        <p class="form-note" data-ja="送信内容はお問い合わせ対応の目的のみに使用します。" data-en="Your information is used solely to respond to your inquiry.">送信内容はお問い合わせ対応の目的のみに使用します。</p>
+        <div class="form-success" id="formSuccess" data-ja="✓ TRANSMISSION COMPLETE ── ご送信ありがとうございます。" data-en="✓ TRANSMISSION COMPLETE ── Thank you, we&rsquo;ll be in touch.">✓ TRANSMISSION COMPLETE ── ご送信ありがとうございます。</div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="#top" class="logo"><span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3L4 20h4l4-9 4 9h4L12 3z" fill="#fff"/></svg></span>Airise</a>
+        <p data-ja="AIとテクノロジーで、ビジネスを次の高みへ。Airise合同会社。" data-en="Rise higher with AI and technology. Airise LLC.">AIとテクノロジーで、ビジネスを次の高みへ。Airise合同会社。</p>
+      </div>
+      <div class="foot-nav">
+        <div class="col">
+          <h4>MENU</h4>
+          <a href="#strengths" data-ja="強み" data-en="Strengths">強み</a>
+          <a href="#about" data-ja="会社概要" data-en="Company">会社概要</a>
+          <a href="#contact" data-ja="お問い合わせ" data-en="Contact">お問い合わせ</a>
+        </div>
+        <div class="col">
+          <h4>SERVICES</h4>
+          <a href="#strengths" data-ja="AI・生成AI開発" data-en="AI Development">AI・生成AI開発</a>
+          <a href="#strengths" data-ja="システム開発" data-en="Software">システム開発</a>
+          <a href="#strengths" data-ja="DX支援" data-en="DX Consulting">DX支援</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-ja="© 2026 AIRISE LLC — ALL RIGHTS RESERVED" data-en="© 2026 AIRISE LLC — ALL RIGHTS RESERVED">© 2026 AIRISE LLC — ALL RIGHTS RESERVED</span>
+      <span>[ AI × RISE ]</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- Language toggle ----
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-ja]').forEach(function(el){
+      var t = el.getAttribute('data-'+lang); if(t!==null) el.innerHTML = t;
+    });
+    document.querySelectorAll('[data-ja-ph]').forEach(function(el){
+      var t = el.getAttribute('data-'+lang+'-ph'); if(t!==null) el.placeholder = t;
+    });
+    document.querySelectorAll('.lang-toggle button').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-lang')===lang);
+    });
+    document.title = (lang==='ja')
+      ? 'Airise合同会社 | AI・テクノロジーでビジネスを次の高みへ'
+      : 'Airise LLC | Rise higher with AI and technology';
+  }
+
+  // ---- Boot loader ----
+  (function(){
+    var boot=document.getElementById('boot');
+    if(!boot) return;
+    var bar=document.getElementById('bootBar'), pct=document.getElementById('bootPct'), log=document.getElementById('bootLog');
+    var msgs=['INITIALIZING AIRISE_OS...','LOADING NEURAL MODULES...','ESTABLISHING UPLINK...','RENDERING INTERFACE...','READY.'];
+    var p=0, reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){ boot.classList.add('done'); setTimeout(function(){boot.remove();},400); return; }
+    var iv=setInterval(function(){
+      p=Math.min(100, p + Math.round(6+Math.random()*12));
+      bar.style.width=p+'%'; pct.textContent=p+'%';
+      log.textContent=msgs[Math.min(msgs.length-1, Math.floor(p/22))];
+      if(p>=100){ clearInterval(iv); setTimeout(function(){ boot.classList.add('done'); setTimeout(function(){boot.remove();},650); }, 260); }
+    },140);
+  })();
+
+  // ---- Live clock (local time) ----
+  (function(){
+    var el=document.getElementById('clock');
+    function two(n){return (n<10?'0':'')+n;}
+    function tick(){ var d=new Date(); el.textContent=two(d.getHours())+':'+two(d.getMinutes())+':'+two(d.getSeconds())+' JST'; }
+    tick(); setInterval(tick,1000);
+  })();
+
+  // ---- Decode text effect ----
+  (function(){
+    var pool='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/#<>[]*+=';
+    document.querySelectorAll('[data-decode]').forEach(function(el){
+      var final=el.getAttribute('data-text'), len=final.length, frame=0;
+      var iv=setInterval(function(){
+        var out='';
+        for(var i=0;i<len;i++){
+          if(final[i]===' '){ out+=' '; continue; }
+          if(i < frame){ out+=final[i]; }
+          else { out+=pool[Math.floor(Math.random()*pool.length)]; }
+        }
+        el.textContent=out;
+        frame += 0.5;
+        if(frame>len){ clearInterval(iv); el.textContent=final; }
+      },40);
+    });
+  })();
+
+  // ---- Cursor glow ----
+  (function(){
+    var g=document.getElementById('cursor');
+    if(window.matchMedia('(pointer: coarse)').matches){ g.style.display='none'; return; }
+    var x=innerWidth/2,y=innerHeight/2,tx=x,ty=y;
+    addEventListener('pointermove',function(e){ tx=e.clientX; ty=e.clientY; });
+    (function loop(){ x+=(tx-x)*.15; y+=(ty-y)*.15; g.style.transform='translate('+x+'px,'+y+'px)'; requestAnimationFrame(loop); })();
+  })();
+
+  // ---- Card spotlight ----
+  document.querySelectorAll('.card').forEach(function(c){
+    c.addEventListener('pointermove',function(e){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--mx',(e.clientX-r.left)+'px');
+      c.style.setProperty('--my',(e.clientY-r.top)+'px');
+    });
+  });
+
+  // ---- Hero network canvas ----
+  (function(){
+    var hero=document.querySelector('.hero'), cv=document.getElementById('net');
+    if(!hero||!cv) return;
+    var ctx=cv.getContext('2d');
+    var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var DPR=Math.min(window.devicePixelRatio||1,2);
+    var W=0,H=0,nodes=[],colors=['79,107,255','138,92,255','34,211,238'],raf,mouse={x:null,y:null};
+    if(!window.matchMedia('(pointer: coarse)').matches){
+      hero.addEventListener('pointermove',function(e){ var r=hero.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top; });
+      hero.addEventListener('pointerleave',function(){ mouse.x=null; mouse.y=null; });
+    }
+    function size(){
+      W=hero.clientWidth; H=hero.clientHeight;
+      cv.width=W*DPR; cv.height=H*DPR; cv.style.width=W+'px'; cv.style.height=H+'px';
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+      var count=Math.max(34,Math.min(94,Math.round(W*H/12000)));
+      nodes=[];
+      for(var i=0;i<count;i++) nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.33,vy:(Math.random()-.5)*.33,c:colors[i%3],r:Math.random()*1.7+1.2});
+    }
+    function frame(){
+      ctx.clearRect(0,0,W,H);
+      var i,j,n,b,dx,dy,d;
+      if(!reduce){ for(i=0;i<nodes.length;i++){ n=nodes[i]; n.x+=n.vx; n.y+=n.vy; if(n.x<0||n.x>W)n.vx*=-1; if(n.y<0||n.y>H)n.vy*=-1; } }
+      ctx.shadowBlur=0;
+      for(i=0;i<nodes.length;i++){ n=nodes[i];
+        for(j=i+1;j<nodes.length;j++){ b=nodes[j]; dx=n.x-b.x; dy=n.y-b.y; d=Math.sqrt(dx*dx+dy*dy);
+          if(d<150){ ctx.strokeStyle='rgba('+n.c+','+((1-d/150)*.5)+')'; ctx.lineWidth=1.1; ctx.beginPath(); ctx.moveTo(n.x,n.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } } }
+      if(mouse.x!==null){
+        for(i=0;i<nodes.length;i++){ n=nodes[i]; dx=n.x-mouse.x; dy=n.y-mouse.y; d=Math.sqrt(dx*dx+dy*dy);
+          if(d<200){ ctx.strokeStyle='rgba('+n.c+','+((1-d/200)*.6)+')'; ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(n.x,n.y); ctx.lineTo(mouse.x,mouse.y); ctx.stroke(); } }
+      }
+      for(i=0;i<nodes.length;i++){ n=nodes[i]; ctx.shadowColor='rgba('+n.c+',.6)'; ctx.shadowBlur=8; ctx.fillStyle='rgba('+n.c+',.88)'; ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,6.2832); ctx.fill(); }
+      if(mouse.x!==null){ ctx.shadowColor='rgba(79,107,255,.7)'; ctx.shadowBlur=12; ctx.fillStyle='rgba(79,107,255,.95)'; ctx.beginPath(); ctx.arc(mouse.x,mouse.y,3.2,0,6.2832); ctx.fill(); }
+      ctx.shadowBlur=0;
+      if(!reduce) raf=requestAnimationFrame(frame);
+    }
+    size(); frame();
+    window.addEventListener('load',function(){ size(); if(reduce) frame(); });
+    var t; window.addEventListener('resize',function(){ clearTimeout(t); t=setTimeout(function(){ size(); if(reduce) frame(); },200); });
+  })();
+
+  // ---- Sticky header ----
+  var header=document.getElementById('top');
+  addEventListener('scroll',function(){ header.classList.toggle('scrolled', scrollY>8); });
+
+  // ---- Scroll progress + section spy ----
+  (function(){
+    var prog=document.getElementById('progress');
+    function onScroll(){ var h=document.documentElement.scrollHeight-window.innerHeight; if(prog) prog.style.width=(h>0?(window.scrollY/h*100):0)+'%'; }
+    addEventListener('scroll',onScroll,{passive:true}); onScroll();
+    var navA={};
+    document.querySelectorAll('.nav-links a').forEach(function(a){ var href=a.getAttribute('href')||''; if(href.charAt(0)==='#'&&href.length>1) navA[href.slice(1)]=a; });
+    if('IntersectionObserver' in window){
+      var spy=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ Object.keys(navA).forEach(function(k){ if(navA[k]) navA[k].classList.toggle('active', k===e.target.id); }); } }); },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+      ['strengths','about','contact'].forEach(function(id){ var s=document.getElementById(id); if(s) spy.observe(s); });
+    }
+  })();
+
+  // ---- Mobile menu ----
+  var burger=document.getElementById('hamburger'), navLinks=document.getElementById('navLinks');
+  burger.addEventListener('click',function(){ navLinks.classList.toggle('open'); });
+  navLinks.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ navLinks.classList.remove('open'); }); });
+
+  // ---- Reveal + meters (with count-up) ----
+  function countUp(el,target,dur){
+    var s=null;
+    function t(ts){ if(s===null)s=ts; var p=Math.min(1,(ts-s)/dur), e=1-Math.pow(1-p,3); el.textContent=Math.round(target*e); if(p<1) requestAnimationFrame(t); else el.textContent=target; }
+    requestAnimationFrame(t);
+  }
+  function activateMeter(m){
+    if(m.classList.contains('in')) return;
+    m.classList.add('in');
+    var mv=m.querySelector('.mval'); if(mv){ countUp(mv, parseInt(mv.getAttribute('data-val'),10)||0, 1500); }
+  }
+  document.querySelectorAll('.meter .mval').forEach(function(mv){ mv.setAttribute('data-val',(parseInt(mv.textContent,10)||0)); mv.textContent='0'; });
+  var reveals=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); },{threshold:0.12, rootMargin:'0px 0px -6% 0px'});
+    reveals.forEach(function(el){ io.observe(el); });
+    var mio=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.querySelectorAll('.meter').forEach(function(m,i){ setTimeout(function(){ activateMeter(m); }, i*160); }); mio.unobserve(e.target); } }); },{threshold:0.4});
+    var mm=document.getElementById('meters'); if(mm) mio.observe(mm);
+    setTimeout(function(){ reveals.forEach(function(el){ el.classList.add('in'); }); document.querySelectorAll('.meter').forEach(function(m){ activateMeter(m); }); }, 4500);
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+    document.querySelectorAll('.meter').forEach(function(m){ activateMeter(m); });
+  }
+
+  // ---- Contact form (demo) ----
+  document.getElementById('contactForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!this.checkValidity()){ this.reportValidity(); return; }
+    document.getElementById('formSuccess').classList.add('show');
+    this.querySelector('button').style.display='none';
+  });
+
+  setLang('ja');
+</script>
+</body>
+</html>

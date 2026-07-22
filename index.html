@@ -58,7 +58,7 @@
 
   /* ---------- boot loader ---------- */
   #boot{display:none}
-  html.js #boot{display:flex;position:fixed;inset:0;z-index:100;background:var(--bg);
+  html.js #boot{display:flex;position:fixed;inset:0;z-index:300;background:var(--bg);
     flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .6s ease,visibility .6s}
   #boot.done{opacity:0;visibility:hidden}
   #boot .bmark{width:92px;height:92px;display:grid;place-items:center;animation:pulse 1.2s ease-in-out infinite}
@@ -307,6 +307,14 @@
 <div id="cursor"></div>
 <div id="progress"></div>
 <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+
+<!-- ===== Boot loader ===== -->
+<div id="boot">
+  <div class="bmark" role="img" aria-label="Airise"></div>
+  <div class="blog mono" id="bootLog">INITIALIZING AIRISE_OS...</div>
+  <div class="bbar"><i id="bootBar"></i></div>
+  <div class="bpct mono" id="bootPct">0%</div>
+</div>
 
 <!-- ===== Intro (logo dissolve) ===== -->
 <div id="intro-spacer"></div>

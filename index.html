@@ -61,8 +61,8 @@
   html.js #boot{display:flex;position:fixed;inset:0;z-index:100;background:var(--bg);
     flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .6s ease,visibility .6s}
   #boot.done{opacity:0;visibility:hidden}
-  #boot .bmark{width:60px;height:60px;border-radius:14px;background:var(--grad);display:grid;place-items:center;box-shadow:var(--glow);animation:pulse 1.2s ease-in-out infinite}
-  #boot .bmark svg{width:34px;height:34px}
+  #boot .bmark{width:82px;height:82px;display:grid;place-items:center;animation:pulse 1.2s ease-in-out infinite}
+  #boot .bmark svg{width:82px;height:82px}
   @keyframes pulse{50%{transform:scale(.9);opacity:.7}}
   #boot .blog{font-family:var(--font-mono);font-size:12px;color:var(--ink-3);text-align:center;min-height:18px;letter-spacing:.05em}
   #boot .bbar{width:min(300px,60vw);height:3px;background:var(--bg-3);border-radius:3px;overflow:hidden}
@@ -81,8 +81,8 @@
   header.scrolled{border-bottom-color:var(--line);box-shadow:0 8px 30px -24px rgba(20,30,80,.5)}
   .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
   .logo{display:flex;align-items:center;gap:11px;font-family:var(--font-hud);font-weight:700;font-size:20px;letter-spacing:.02em}
-  .logo .mark{width:32px;height:32px;border-radius:9px;background:var(--grad);display:grid;place-items:center;box-shadow:var(--glow);position:relative}
-  .logo .mark svg{width:18px;height:18px}
+  .logo .mark{width:42px;height:42px;display:grid;place-items:center;position:relative}
+  .logo .mark svg{width:42px;height:42px}
   .nav-links{display:flex;align-items:center;gap:32px}
   .nav-links a{font-family:var(--font-hud);font-size:14px;font-weight:500;color:var(--ink-2);transition:.2s;position:relative;display:flex;align-items:center;gap:7px}
   .nav-links a i{font-family:var(--font-mono);font-size:10px;color:var(--blue);font-style:normal;padding:1px 4px;border-radius:3px;transition:.25s}
@@ -278,7 +278,7 @@
 
 <!-- ===== Boot loader ===== -->
 <div id="boot">
-  <div class="bmark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3L4 20h4l4-9 4 9h4L12 3z" fill="#fff"/></svg></div>
+  <div class="bmark"><svg viewBox="0 0 120 120" fill="none"><defs><linearGradient id="Lb" x1="40" y1="94" x2="62" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3a1fa0"/><stop offset=".55" stop-color="#5b3ef0"/><stop offset="1" stop-color="#8a5cff"/></linearGradient><linearGradient id="Rb" x1="60" y1="34" x2="84" y2="94" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5a6bff"/><stop offset="1" stop-color="#3f57ff"/></linearGradient><linearGradient id="Tb" x1="29" y1="87" x2="90" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#26aede"/><stop offset="1" stop-color="#33e2f6"/></linearGradient></defs><path d="M43 91 L59 35" stroke="url(#Lb)" stroke-width="19" stroke-linecap="round"/><path d="M59 35 L81 91" stroke="url(#Rb)" stroke-width="16" stroke-linecap="round"/><path d="M87 55 C 73 65 55 74 29 87 C 45 79 66 73 85 67 Z" fill="url(#Tb)"/><path d="M102 21 L66 37 L85 49 Z" fill="#7fe7f7"/><path d="M102 21 L85 49 L92 67 Z" fill="#20c2e6"/></svg></div>
   <div class="blog mono" id="bootLog">INITIALIZING AIRISE_OS...</div>
   <div class="bbar"><i id="bootBar"></i></div>
   <div class="bpct mono" id="bootPct">0%</div>
@@ -300,7 +300,7 @@
 <header id="top">
   <div class="wrap nav">
     <a href="#top" class="logo">
-      <span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3L4 20h4l4-9 4 9h4L12 3z" fill="#fff"/></svg></span>
+      <span class="mark"><svg viewBox="0 0 120 120" fill="none"><defs><linearGradient id="Lh" x1="40" y1="94" x2="62" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3a1fa0"/><stop offset=".55" stop-color="#5b3ef0"/><stop offset="1" stop-color="#8a5cff"/></linearGradient><linearGradient id="Rh" x1="60" y1="34" x2="84" y2="94" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5a6bff"/><stop offset="1" stop-color="#3f57ff"/></linearGradient><linearGradient id="Th" x1="29" y1="87" x2="90" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#26aede"/><stop offset="1" stop-color="#33e2f6"/></linearGradient></defs><path d="M43 91 L59 35" stroke="url(#Lh)" stroke-width="19" stroke-linecap="round"/><path d="M59 35 L81 91" stroke="url(#Rh)" stroke-width="16" stroke-linecap="round"/><path d="M87 55 C 73 65 55 74 29 87 C 45 79 66 73 85 67 Z" fill="url(#Th)"/><path d="M102 21 L66 37 L85 49 Z" fill="#7fe7f7"/><path d="M102 21 L85 49 L92 67 Z" fill="#20c2e6"/></svg></span>
       Airise
     </a>
     <nav class="nav-links" id="navLinks">
@@ -452,7 +452,7 @@
   <div class="wrap">
     <div class="foot-top">
       <div class="foot-brand">
-        <a href="#top" class="logo"><span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3L4 20h4l4-9 4 9h4L12 3z" fill="#fff"/></svg></span>Airise</a>
+        <a href="#top" class="logo"><span class="mark"><svg viewBox="0 0 120 120" fill="none"><defs><linearGradient id="Lf" x1="40" y1="94" x2="62" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3a1fa0"/><stop offset=".55" stop-color="#5b3ef0"/><stop offset="1" stop-color="#8a5cff"/></linearGradient><linearGradient id="Rf" x1="60" y1="34" x2="84" y2="94" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5a6bff"/><stop offset="1" stop-color="#3f57ff"/></linearGradient><linearGradient id="Tf" x1="29" y1="87" x2="90" y2="52" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#26aede"/><stop offset="1" stop-color="#33e2f6"/></linearGradient></defs><path d="M43 91 L59 35" stroke="url(#Lf)" stroke-width="19" stroke-linecap="round"/><path d="M59 35 L81 91" stroke="url(#Rf)" stroke-width="16" stroke-linecap="round"/><path d="M87 55 C 73 65 55 74 29 87 C 45 79 66 73 85 67 Z" fill="url(#Tf)"/><path d="M102 21 L66 37 L85 49 Z" fill="#7fe7f7"/><path d="M102 21 L85 49 L92 67 Z" fill="#20c2e6"/></svg></span>Airise</a>
         <p data-ja="AIとテクノロジーで、ビジネスを次の高みへ。Airise合同会社。" data-en="Rise higher with AI and technology. Airise LLC.">AIとテクノロジーで、ビジネスを次の高みへ。Airise合同会社。</p>
       </div>
       <div class="foot-nav">
